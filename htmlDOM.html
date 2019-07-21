@@ -5,12 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
     <!-- Bootstrap core CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
     <!-- Material Design Bootstrap -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.5/css/mdb.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
     <title>Document</title>
 </head>
 
@@ -77,7 +79,19 @@
 
         </tbody>
     </table>
-
+    
+    <!-- JQuery -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <!-- Bootstrap tooltips -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js">
+    </script>
+    <!-- Bootstrap core JavaScript -->
+    <script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <!-- MDB core JavaScript -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.5/js/mdb.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <script>
         var count = 0;
         var save = document.getElementById('save');
@@ -94,62 +108,62 @@
             let patt = /[^a-z]/gi;
             let schoolpatt = /[^a-z \s]/gi;
             let contactpatt = /[^0-9]/gi;
-            let isValiduname,isValidsname,isValidcontact;
+            let isValiduname, isValidsname, isValidcontact;
 
             //match 
             //valiate on username text field
             if (uname.match(patt) != null) {
                 usermsg.innerHTML = "*user input number or other character beside a -z"
                 usermsg.style.color = 'red'
-                isValiduname=false;
+                isValiduname = false;
             }
             if (uname.match(patt) == null) {
                 usermsg.innerHTML = "*correct username"
                 usermsg.style.color = 'green'
-                isValiduname=true;
+                isValiduname = true;
             }
             if (uname == "" || uname == null) {
                 usermsg.innerHTML = "*cannot blank"
                 usermsg.style.color = 'red'
-                isValiduname=false;
+                isValiduname = false;
             }
             //validate school name text field
             if (sname.match(schoolpatt) != null) {
                 console.log("incorrect school name")
                 snamemsg.innerHTML = "*incorrect school name"
                 snamemsg.style.color = 'red'
-                isValidsname=false;
+                isValidsname = false;
             }
             if (sname.match(schoolpatt) == null) {
                 snamemsg.innerHTML = "correct school name"
                 snamemsg.style.color = 'green'
-                isValidsname=true;
+                isValidsname = true;
             }
             if (sname == "" || sname == null) {
                 snamemsg.innerHTML = "*cannot blank school"
                 snamemsg.style.color = 'red'
-                isValidsname=false;
+                isValidsname = false;
             }
 
             //validate contact text field
             if (contact.length < 9 || contact.length > 10) {
                 contactmsg.innerHTML = "*invalid contact"
                 contactmsg.style.color = 'red';
-                isValidcontact=false;
+                isValidcontact = false;
             }
             if (contact.match(contactpatt) != null) {
                 contactmsg.innerHTML = "*invalid contact"
                 contactmsg.style.color = 'red';
-                isValidcontact=false;
+                isValidcontact = false;
             }
 
             if (contact[0] == '0' && contact.match(contactpatt) == null) {
                 contactmsg.innerHTML = "correct contact"
                 contactmsg.style.color = 'green'
-                isValidcontact=true;
+                isValidcontact = true;
                 // contact.value = `+855${contact.value.substring(1)}`
             }
-            if (isValiduname&&isValidsname&&isValidcontact) {
+            if (isValiduname && isValidsname && isValidcontact) {
                 if (text == "Save") {
                     count = count + 1;
                     let info = {
@@ -162,9 +176,10 @@
                     snamemsg.innerHTML = ""
                     contactmsg.innerHTML = ""
                     addToTable(info);
-                    document.getElementById('save').setAttribute('data-dismiss','modal');
+                    document.getElementById('save').setAttribute('data-dismiss', 'modal');
+                    // Display an info toast with no title
+                    toastr.success('The user has been added!');
                 } else {
-                    console.log("update")
                     let Updateinfo = {
                         uname: uname,
                         sname: sname,
@@ -175,7 +190,7 @@
                     snamemsg.innerHTML = ""
                     contactmsg.innerHTML = ""
                     update(Updateinfo);
-                    document.getElementById('save').setAttribute('data-dismiss','modal');
+                    document.getElementById('save').setAttribute('data-dismiss', 'modal');
                 }
             }
         })
@@ -227,15 +242,53 @@
             document.getElementById('uname').value = "";
             document.getElementById('sname').value = "";
             document.getElementById('contact').value = "";
+
         }
 
         function remove(btn) {
-            let r = confirm('Delete?');
-            if (r == true) {
-                let pa = btn.parentNode.parentNode.parentNode;
-                let currentrow = btn.parentNode.parentNode;
-                pa.removeChild(currentrow);
-            }
+            // let r = confirm('Delete?');
+            // if (r == true) {
+            // let pa = btn.parentNode.parentNode.parentNode;
+            // let currentrow = btn.parentNode.parentNode;
+            // pa.removeChild(currentrow);
+            // }
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false,
+            })
+
+            swalWithBootstrapButtons.fire({
+                title: 'Delete User',
+                text: "Are you sure to delete?",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes',
+                cancelButtonText: 'No',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.value) {
+                    let pa = btn.parentNode.parentNode.parentNode;
+                    let currentrow = btn.parentNode.parentNode;
+                    pa.removeChild(currentrow);
+                    swalWithBootstrapButtons.fire(
+                        'Deleted',
+                        'User has been deleted.',
+                        'successfull'
+                    )
+                } else if (
+                    // Read more about handling dismissals
+                    result.dismiss === Swal.DismissReason.cancel
+                ) {
+                    swalWithBootstrapButtons.fire(
+                        'Cancelled',
+                        'User is safe :)',
+                        'error'
+                    )
+                }
+            })
         }
 
 
@@ -262,24 +315,47 @@
         }
 
         function update(btn) {
-            var allChild = document.getElementById(btn.id);
-            allChild.childNodes[0].innerHTML = btn.uname;
-            allChild.childNodes[1].innerHTML = btn.sname;
-            allChild.childNodes[2].innerHTML = btn.contact;
-        }
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false,
+            })
 
+            swalWithBootstrapButtons.fire({
+                title: 'Update User',
+                text: "Are you sure to update?",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes',
+                cancelButtonText: 'No',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.value) {
+                    var allChild = document.getElementById(btn.id);
+                    allChild.childNodes[0].innerHTML = btn.uname;
+                    allChild.childNodes[1].innerHTML = btn.sname;
+                    allChild.childNodes[2].innerHTML = btn.contact;
+                    swalWithBootstrapButtons.fire(
+                        'Updated',
+                        'User has been updated.',
+                        'successfull'
+                    )
+                } else if (
+                    // Read more about handling dismissals
+                    result.dismiss === Swal.DismissReason.cancel
+                ) {
+                    swalWithBootstrapButtons.fire(
+                        'Cancelled',
+                        'User has update nothing :)'
+                        // 'error'
+                    )
+                }
+            })
+        }
     </script>
-    <!-- JQuery -->
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <!-- Bootstrap tooltips -->
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js">
-    </script>
-    <!-- Bootstrap core JavaScript -->
-    <script type="text/javascript"
-        src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
-    <!-- MDB core JavaScript -->
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.5/js/mdb.min.js">
-    </script>
+    
 </body>
 
 </html>
